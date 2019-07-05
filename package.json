@@ -1,38 +1,29 @@
 {
   "name": "circlepacker",
-  "version": "1.1.0",
-  "description": "circle packing in a webworker",
-  "keywords": [
-    "circkepacker",
-    "circle",
-    "packing",
-    "webworker",
-    "browser"
-  ],
-  "main": "dist/circlepacker.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build-es6 && npm run build-es5 && npm run build-min && npm run build-min-es5",
-    "build-es6": "node build.js",
-    "build-es5": "node build.js -e",
-    "build-min": "node build.js -m",
-    "build-min-es5": "node build.js -me"
+  "version": "1.0.0",
+  "description": "circlepacker ===",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
   },
-  "module": "dist/circlepacker.es6.js",
+  "scripts": {
+    "build": "webpack -p",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snorpey/circlepacker.git"
+    "url": "git+https://github.com/afshawnlotfi/circlepacker.git"
   },
-  "author": "Georg Fischer <snorpey@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "commander": "^2.9.0",
-    "rollup": "^0.41.4",
-    "rollup-plugin-buble": "^0.15.0",
-    "uglify-js": "github:mishoo/UglifyJS2#harmony"
-  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/snorpey/circlepacker/issues"
+    "url": "https://github.com/afshawnlotfi/circlepacker/issues"
   },
-  "homepage": "https://github.com/snorpey/circlepacker#readme"
+  "homepage": "https://github.com/afshawnlotfi/circlepacker#readme",
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+  }
 }
