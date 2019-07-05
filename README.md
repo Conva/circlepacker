@@ -43,7 +43,7 @@ returns a new circlepacker instance. it accepts the following options:
 
 		// the bounds of the area we want to draw the circles in
 		// REQUIRED
-		bounds: { width: 100, height: 100 },
+		size: { width: 100, height: 100 },
 	
 		// the initial position and sizes of our circles
 		// it is possible to add more circles later

@@ -2,7 +2,9 @@
   "name": "circlepacker",
   "version": "1.0.0",
   "description": "circlepacker ===",
-  "main": "index.js",
+  "main": "dist/CirclePacker.js",
+  "module": "dist/CirclePacker.js",
+
   "directories": {
     "example": "examples"
   },
