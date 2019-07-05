@@ -3,7 +3,6 @@
 
 import PackedCircleManager, { Bounds, Size }  from './PackedCircleManager.js';
 import Vector, { VectorType } from './Vector.js';
-import { sendWorkerMessage } from './util.js';
 import PackedCircle from './PackedCircle.js';
 import { PackedCircleObject } from './CirclePacker.js';
 

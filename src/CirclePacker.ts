@@ -22,7 +22,6 @@ export default class CirclePacker {
 	private animationFrameId = NaN;
 	private initialized = true;
 	private isContinuousModeActive: boolean;
-	private worker = new Worker('src/CirclePackWorker.js');
 	private e:EventHandlerTypes
 
 	constructor(params: {
@@ -37,7 +36,6 @@ export default class CirclePacker {
 		target?: VectorType,
 		continuousMode?: boolean
 	}) {
-		// this.worker.addEventListener('message( this.receivedWorkerMessage.bind(this));
 		this.e = eventHandler( (newPositions) => {
 			this.areItemsMoving = this.hasItemMoved(newPositions);
 		})
@@ -211,9 +209,7 @@ export default class CirclePacker {
 	}
 
 	destroy() {
-		if (this.worker) { this.worker.terminate(); }
 		this.stopLoop();
-
 		this.onMove = null;
 		this.onMoveStart = null;
 		this.onMoveEnd = null;
