@@ -21,7 +21,7 @@ export function random(min: number, max: number) {
 
 export function convertToPackedCircle(circle: CircleInputType) {
   return (
-   new PackedCircle(circle.id,circle.radius,circle.position.x,circle.position.y)
+   new PackedCircle(circle.id,circle.radius,circle.position.x,circle.position.y, undefined, circle.locked)
   );
 }
 

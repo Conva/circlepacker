@@ -14,7 +14,7 @@ var CirclePacker = /** @class */ (function () {
         this.e = CirclePackWorker_1.eventHandler(function (newPositions) {
             _this.areItemsMoving = _this.hasItemMoved(newPositions);
             _this.updateListeners("move", newPositions);
-        });
+        }, params.padding);
         this.isContinuousModeActive =
             typeof params.continuousMode === "boolean" ? params.continuousMode : true;
         this.onMoveStart = params.onMoveStart || null;

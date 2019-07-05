@@ -11,6 +11,7 @@ export declare type CircleInputType = {
     id: string;
     radius: number;
     position: VectorType;
+    locked: boolean;
 };
 export declare type PackedCircleObject = {
     [id: string]: PackedCircle;
@@ -33,7 +34,8 @@ export default class CirclePacker {
         onMoveEnd?: OnEvent;
         centeringPasses?: number;
         collisionPasses: number;
-        circles?: PackedCircle[];
+        circles?: CircleInputType[];
+        padding?: number;
         size?: Size;
         bounds?: Bounds;
         target?: VectorType;

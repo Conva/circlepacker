@@ -16,4 +16,4 @@ export declare type EventHandlerTypes = {
     update: () => void;
     size: (message: Size) => void;
 };
-export declare const eventHandler: (moveCallback: (position: PackedCircleObject) => void) => EventHandlerTypes;
+export declare const eventHandler: (moveCallback: (position: PackedCircleObject) => void, padding?: number | undefined) => EventHandlerTypes;

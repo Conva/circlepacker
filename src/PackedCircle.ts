@@ -21,7 +21,9 @@ export default class PackedCircle {
   }
 
   set previousPosition(newPosition: Vector) {
-    this._previousPosition = newPosition;
+    if (!this.locked){
+      this._previousPosition = newPosition;
+    }
   }
 
   get originalRadius(): number {
@@ -46,11 +48,21 @@ export default class PackedCircle {
     return this._targetPosition;
   }
   set targetPosition(newTargetPos: Vector) {
-    this._targetPosition = newTargetPos;
+    if (!this.locked){
+      this._targetPosition = newTargetPos;
+    }
   }
 
   get position(): Vector {
     return this._position;
+  }
+
+
+  set position(newPosition : Vector) {
+    if (!this.locked){
+      this._position = newPosition
+    }
+
   }
 
   get radius(): number {
@@ -60,26 +72,26 @@ export default class PackedCircle {
     this._radius = newRadius;
   }
 
-  constructor(public id: string, radius: number, x = 0, y = 0, delta = 0) {
+  constructor(public id: string, radius: number, x = 0, y = 0, delta = 0, private locked = false) {
     // Where we really are
-    this._position = new Vector(x, y);
-    this._previousPosition = new Vector(x, y);
+    this._position = new Vector(x, y,locked);
+    this._previousPosition = new Vector(x, y,locked);
 
     // For the div stuff  - to avoid superflous movement calls
     this._positionWithOffset = new Vector(x, y);
-    this._previousPositionWithOffset = new Vector(x, y);
+    this._previousPositionWithOffset = new Vector(x, y, locked);
 
     // Stored because transform3D is relative
     this.initializeRadius(radius);
   }
 
   setPosition(aPosition: Vector) {
-    this._previousPosition = this._position;
-    this._position = aPosition.cp();
+      this.previousPosition = this._position;
+      this.position = aPosition.cp();
   }
 
   distanceSquaredFromTargetPosition() {
-    var distanceSquared = this._position.distanceSquared(this._targetPosition);
+    var distanceSquared = this._position.distanceSquared(this._targetPosition)
     // if it's shorter than either radi, we intersect
     return distanceSquared < this.radiusSquared;
   }
@@ -87,7 +99,8 @@ export default class PackedCircle {
   get delta() {
     return new Vector(
       this._position.x - this._previousPosition.x,
-      this._position.y - this._previousPosition.y
+      this._position.y - this._previousPosition.y,
+      this.locked
     );
   }
 }

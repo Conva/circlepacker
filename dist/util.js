@@ -18,7 +18,7 @@ function random(min, max) {
 }
 exports.random = random;
 function convertToPackedCircle(circle) {
-    return (new PackedCircle_1.default(circle.id, circle.radius, circle.position.x, circle.position.y));
+    return (new PackedCircle_1.default(circle.id, circle.radius, circle.position.x, circle.position.y, undefined, circle.locked));
 }
 exports.convertToPackedCircle = convertToPackedCircle;
 function isSizeValid(size) {

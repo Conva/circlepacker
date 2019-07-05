@@ -20,15 +20,20 @@ export default class Vector {
 	}
 
 	set x(newX: number) {
-		this._x = newX;
+		if (!this.locked){
+			this._x = newX;
+		}
 	}
 
 	set y(newY: number) {
-		this._y = newY
+		if (!this.locked){
+			this._y = newY
+		}
 	}
 
 
-	constructor(x: number, y: number) {
+	constructor(x: number, y: number, private locked = false) {
+
 		this._x = x;
 		this._y = y;
 	}
@@ -38,15 +43,15 @@ export default class Vector {
 	}
 
 	mul(factor: number) {
-		this._x *= factor;
-		this._y *= factor;
+		this.x *= factor;
+		this.y *= factor;
 		return this;
 	}
 
 	normalize() {
 		var l = this.length();
-		this._x /= l;
-		this._y /= l;
+		this.x /= l;
+		this.y /= l;
 		return this;
 	}
 

@@ -7,8 +7,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var PackedCircleManager_1 = __importDefault(require("./PackedCircleManager"));
 var Vector_1 = __importDefault(require("./Vector"));
-exports.eventHandler = function (moveCallback) {
-    var circleManager = new PackedCircleManager_1.default();
+exports.eventHandler = function (moveCallback, padding) {
+    var circleManager = new PackedCircleManager_1.default(padding);
     var bounds = function (message) {
         circleManager.setBounds(message);
     };

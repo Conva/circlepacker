@@ -20,6 +20,9 @@ export default class PackedCircleManager {
   readonly allCircles: PackedCircle[] = [];
   private desiredTarget = new Vector(0, 0);
 
+  constructor(private padding = 1.08){
+
+  }
   // Number of passes for the centering and collision
   // algorithms - it's (O)logN^2 so use increase at your own risk!
   // Play with these numbers - see what works best for your project
@@ -192,7 +195,7 @@ export default class PackedCircleManager {
 
           // The distance between the two circles radii,
           // but we're also gonna pad it a tiny bit
-          var r = (circleA.radius + circleB.radius) * 1.08;
+          var r = (circleA.radius + circleB.radius) * this.padding;
           var d = circleA.position.distanceSquared(circleB.position);
 
           if (d < r * r - 0.02) {

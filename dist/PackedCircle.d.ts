@@ -1,6 +1,7 @@
 import Vector from "./Vector";
 export default class PackedCircle {
     id: string;
+    private locked;
     private _previousPosition;
     private _targetPosition;
     private _position;
@@ -15,9 +16,9 @@ export default class PackedCircle {
     readonly previousPositionWithOffset: Vector;
     private initializeRadius;
     targetPosition: Vector;
-    readonly position: Vector;
+    position: Vector;
     radius: number;
-    constructor(id: string, radius: number, x?: number, y?: number, delta?: number);
+    constructor(id: string, radius: number, x?: number, y?: number, delta?: number, locked?: boolean);
     setPosition(aPosition: Vector): void;
     distanceSquaredFromTargetPosition(): boolean;
     readonly delta: Vector;

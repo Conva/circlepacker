@@ -3,11 +3,12 @@ export declare type VectorType = {
     y: number;
 };
 export default class Vector {
+    private locked;
     private _x;
     private _y;
     x: number;
     y: number;
-    constructor(x: number, y: number);
+    constructor(x: number, y: number, locked?: boolean);
     cp(): Vector;
     mul(factor: number): this;
     normalize(): this;

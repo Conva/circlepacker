@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector = /** @class */ (function () {
-    function Vector(x, y) {
+    function Vector(x, y, locked) {
+        if (locked === void 0) { locked = false; }
+        this.locked = locked;
         this._x = x;
         this._y = y;
     }
@@ -10,7 +12,9 @@ var Vector = /** @class */ (function () {
             return this._x;
         },
         set: function (newX) {
-            this._x = newX;
+            if (!this.locked) {
+                this._x = newX;
+            }
         },
         enumerable: true,
         configurable: true
@@ -20,7 +24,9 @@ var Vector = /** @class */ (function () {
             return this._y;
         },
         set: function (newY) {
-            this._y = newY;
+            if (!this.locked) {
+                this._y = newY;
+            }
         },
         enumerable: true,
         configurable: true
@@ -29,14 +35,14 @@ var Vector = /** @class */ (function () {
         return new Vector(this._x, this._y);
     };
     Vector.prototype.mul = function (factor) {
-        this._x *= factor;
-        this._y *= factor;
+        this.x *= factor;
+        this.y *= factor;
         return this;
     };
     Vector.prototype.normalize = function () {
         var l = this.length();
-        this._x /= l;
-        this._y /= l;
+        this.x /= l;
+        this.y /= l;
         return this;
     };
     Vector.prototype.length = function () {

@@ -6,7 +6,7 @@ import { EventHandlerTypes, eventHandler } from "./CirclePackWorker";
 
 export type IdObj = { id: string };
 export type IdPosObj = IdObj & { position: VectorType };
-export type CircleInputType = {id : string, radius : number, position : VectorType }
+export type CircleInputType = {id : string, radius : number, position : VectorType, locked : boolean }
 export type PackedCircleObject = { [id: string]: PackedCircle };
 export type OnEvent =
   | ((updatedCirclePositions: PackedCircleObject) => void)
@@ -33,7 +33,8 @@ export default class CirclePacker {
     onMoveEnd?: OnEvent;
     centeringPasses?: number;
     collisionPasses: number;
-    circles?: PackedCircle[];
+    circles?: CircleInputType[];
+    padding?:number;
     size?: Size;
     bounds?: Bounds;
     target?: VectorType;
@@ -44,7 +45,7 @@ export default class CirclePacker {
 
       this.updateListeners("move", newPositions)
 
-    });
+    }, params.padding);
     this.isContinuousModeActive =
       typeof params.continuousMode === "boolean" ? params.continuousMode : true;
 

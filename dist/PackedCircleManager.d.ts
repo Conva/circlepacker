@@ -11,11 +11,13 @@ export declare type Bounds = {
     bottom: number;
 };
 export default class PackedCircleManager {
+    private padding;
     private draggedCircle;
     private _damping;
     private bounds;
     readonly allCircles: PackedCircle[];
     private desiredTarget;
+    constructor(padding?: number);
     private _numberOfCenteringPasses;
     private _numberOfCollisionPasses;
     numberOfCenteringPasses: number;

@@ -8,7 +8,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = __importDefault(require("./Vector"));
 var PackedCircleManager = /** @class */ (function () {
-    function PackedCircleManager() {
+    function PackedCircleManager(padding) {
+        if (padding === void 0) { padding = 1.08; }
+        this.padding = padding;
         this.draggedCircle = null;
         this._damping = 0.025;
         this.bounds = { left: 0, top: 0, right: 0, bottom: 0 };
@@ -161,7 +163,7 @@ var PackedCircleManager = /** @class */ (function () {
                     var dy = circleB.position.y - circleA.position.y;
                     // The distance between the two circles radii,
                     // but we're also gonna pad it a tiny bit
-                    var r = (circleA.radius + circleB.radius) * 1.08;
+                    var r = (circleA.radius + circleB.radius) * this.padding;
                     var d = circleA.position.distanceSquared(circleB.position);
                     if (d < r * r - 0.02) {
                         v.x = dx;

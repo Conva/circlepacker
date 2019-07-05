@@ -23,10 +23,11 @@ export type EventHandlerTypes = {
 };
 
 export const eventHandler = (
-  moveCallback: (position: PackedCircleObject) => void
+  moveCallback: (position: PackedCircleObject) => void,
+  padding? : number
 ) => {
 
-  const circleManager = new PackedCircleManager();
+  const circleManager = new PackedCircleManager(padding);
 
   const bounds = (message: Bounds) => {
     circleManager.setBounds(message);
