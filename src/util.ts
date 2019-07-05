@@ -1,3 +1,7 @@
+import { PackedCircleObject } from "./CirclePacker";
+import { Size } from "./PackedCircleManager";
+import PackedCircle from "./PackedCircle";
+
 export function random ( min, max, intResult ) {
 	if ( typeof min !== 'number' && typeof max !== 'number' ) {
 		min = 0;
@@ -18,15 +22,12 @@ export function random ( min, max, intResult ) {
 	return result;
 }
 
-export function sendWorkerMessage ( worker, msg ) {
+export function sendWorkerMessage ( worker : Worker, msg : any ) {
 	worker.postMessage( JSON.stringify( msg ) );
 }
 
-export function processWorkerMessage ( event ) {
-	return event.data ? JSON.parse( event.data ) : { };
-}
 
-export function isCircleValid ( circle ) {
+export function isCircleValid ( circle : PackedCircle ) {
 	return circle &&
 		circle.id &&
 		circle.radius &&
@@ -35,8 +36,8 @@ export function isCircleValid ( circle ) {
 		typeof circle.position.y === 'number'
 }
 
-export function isBoundsValid ( bounds ) {
-	return bounds &&
-		typeof bounds.width === 'number' &&
-		typeof bounds.height === 'number'
+export function isSizeValid ( size : Size ) {
+	return size &&
+		typeof size.width === 'number' &&
+		typeof size.height === 'number'
 }

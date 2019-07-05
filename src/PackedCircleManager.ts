@@ -3,20 +3,43 @@
 // by @onedayitwillmake / Mario Gonzalez with some changes by @snorpey
 
 import PackedCircle from './PackedCircle.js';
-import Vector from './Vector.js';
+import Vector, { VectorType } from './Vector.js';
+
+export type Size = { width : number, height : number }
+export type Bounds = { left: number, top: number, right: number, bottom: number }
 
 export default class PackedCircleManager {
-	constructor () {
-		this.allCircles = [ ];
-		this.desiredTarget = new Vector( 0, 0 );
-		this.bounds = { left: 0, top: 0, right: 0, bottom: 0 };
-		this.damping = 0.025;
+	private draggedCircle : PackedCircle | null;
+	private _damping = 0.025;
+	private bounds:Bounds = { left: 0, top: 0, right: 0, bottom: 0 };
+	readonly allCircles:PackedCircle[] = [ ];
+	private desiredTarget = new Vector( 0, 0 );
 
-		// Number of passes for the centering and collision
-		// algorithms - it's (O)logN^2 so use increase at your own risk!
-		// Play with these numbers - see what works best for your project
-		this.numberOfCenteringPasses = 1;
-		this.numberOfCollisionPasses = 3;
+	// Number of passes for the centering and collision
+	// algorithms - it's (O)logN^2 so use increase at your own risk!
+	// Play with these numbers - see what works best for your project
+	private _numberOfCenteringPasses = 1;
+	private _numberOfCollisionPasses = 3;
+
+	get numberOfCenteringPasses():number{
+		return this._numberOfCenteringPasses
+	}
+
+	set numberOfCenteringPasses(newNumberOfCenteringPasses : number){
+		this._numberOfCenteringPasses = newNumberOfCenteringPasses
+	}
+
+	get numberOfCollisionPasses():number{
+		return this._numberOfCollisionPasses
+	}
+
+	set numberOfCollisionPasses(newNumberOfCollisionPasses : number){
+		this._numberOfCollisionPasses = newNumberOfCollisionPasses
+	}
+
+
+	set damping(newDamping : number){
+		this._damping = newDamping;
 	}
 
 	/**
@@ -24,29 +47,31 @@ export default class PackedCircleManager {
 	 * This is used to locate the 'center'
 	 * @param aBoundaryObject
 	 */
-	setBounds ( aBoundaryObject ) {
-		if ( typeof aBoundaryObject.left === 'number' ) {
-			this.bounds.left = aBoundaryObject.left;
+	setBounds ( bounds : Bounds) {
+		if ( typeof bounds.left === 'number' ) {
+			this.bounds.left = bounds.left;
 		}
 
-		if ( typeof aBoundaryObject.right === 'number' ) {
-			this.bounds.right = aBoundaryObject.right;
+		if ( typeof bounds.right === 'number' ) {
+			this.bounds.right = bounds.right;
 		}
 
-		if ( typeof aBoundaryObject.top === 'number' ) {
-			this.bounds.top = aBoundaryObject.top;
+		if ( typeof bounds.top === 'number' ) {
+			this.bounds.top = bounds.top;
 		}
 
-		if ( typeof aBoundaryObject.bottom === 'number' ) {
-			this.bounds.bottom = aBoundaryObject.bottom;
+		if ( typeof bounds.bottom === 'number' ) {
+			this.bounds.bottom = bounds.bottom;
+		}
+	}
+
+	setSize(size : Size){
+		if ( typeof size.width === 'number' ) {
+			this.bounds.right = this.bounds.left + size.width;
 		}
 
-		if ( typeof aBoundaryObject.width === 'number' ) {
-			this.bounds.right = this.bounds.left + aBoundaryObject.width;
-		}
-
-		if ( typeof aBoundaryObject.height === 'number' ) {
-			this.bounds.bottom = this.bounds.top + aBoundaryObject.height;
+		if ( typeof size.height === 'number' ) {
+			this.bounds.bottom = this.bounds.top + size.height;
 		}
 	}
 
@@ -54,10 +79,10 @@ export default class PackedCircleManager {
 	 * Add a circle
 	 * @param aCircle A Circle to add, should already be created.
 	 */
-	addCircle ( aCircle ) {
-		if ( ! ( aCircle instanceof PackedCircle ) ) {
-			aCircle = new PackedCircle( aCircle.id, aCircle.radius, aCircle.position.x, aCircle.position.y );
-		}
+	addCircle ( aCircle : PackedCircle) {
+		// if ( ! ( aCircle instanceof PackedCircle ) ) {
+		// 	aCircle = new PackedCircle( aCircle.id, aCircle.radius, aCircle.position.x, aCircle.position.y );
+		// }
 
 		this.allCircles.push( aCircle );
 		aCircle.targetPosition = this.desiredTarget.cp();
@@ -67,7 +92,7 @@ export default class PackedCircleManager {
 	 * Remove a circle
 	 * @param circleToRemoveId Id of the circle to remove
 	 */
-	removeCircle ( circleToRemoveId ) {
+	removeCircle ( circleToRemoveId : string ) {
 		const indicesToRemove = this.allCircles.reduce( ( indices, circle, index ) => {
 			if ( circle.id === circleToRemoveId ) {
 				indices.push( index );
@@ -118,7 +143,7 @@ export default class PackedCircleManager {
 		var circleList = this.allCircles;
 		var circleCount = circleList.length;
 
-		for ( var n = 0; n < this.numberOfCenteringPasses; n++ ) {			
+		for ( var n = 0; n < this._numberOfCenteringPasses; n++ ) {			
 			for ( var i = 0; i < circleCount; i++ ) {
 				var circle = circleList[i];
 
@@ -128,7 +153,7 @@ export default class PackedCircleManager {
 
 				v.x = circle.position.x - aTarget.x;
 				v.y = circle.position.y - aTarget.y;
-				v.mul ( this.damping );
+				v.mul ( this._damping );
 				
 				circle.position.x -= v.x;
 				circle.position.y -= v.y;
@@ -148,7 +173,7 @@ export default class PackedCircleManager {
 		var circleCount = circleList.length;
 
 		// Collide circles
-		for ( var n = 0; n < this.numberOfCollisionPasses; n++ ) {
+		for ( var n = 0; n < this._numberOfCollisionPasses; n++ ) {
 			for ( var i = 0; i < circleCount; i++ ) {
 				var circleA = circleList[i];
 				
@@ -246,18 +271,18 @@ export default class PackedCircleManager {
 		this.draggedCircle = aCircle;
 	}
 
-	dragStart ( id ) {
+	dragStart ( id : string) {
 		const draggedCircle = this.allCircles.filter( c => { return c.id === id; } )[0];
 		this.setDraggedCircle( draggedCircle );
 	}
 
-	dragEnd ( id ) {
+	dragEnd () {
 		if ( this.draggedCircle ) {
 			this.setDraggedCircle( null );
 		}
 	}
 
-	drag ( id, position ) {
+	drag ( position : VectorType) {
 		if ( this.draggedCircle && position ) {
 			this.draggedCircle.position.x = position.x;
 			this.draggedCircle.position.y = position.y;
@@ -268,7 +293,7 @@ export default class PackedCircleManager {
 	 * Sets the target position where the circles want to be
 	 * @param aPosition
 	 */
-	setTarget ( aPosition ) {
+	setTarget ( aPosition : Vector) {
 		this.desiredTarget = aPosition;
 	}
 }
