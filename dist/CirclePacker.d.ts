@@ -1,5 +1,5 @@
 import PackedCircle from "./PackedCircle";
-import { Size, Bounds } from "./PackedCircleManager";
+import { Bounds, Size } from "./PackedCircleManager";
 import { VectorType } from "./Vector";
 export declare type IdObj = {
     id: string;
@@ -18,6 +18,19 @@ export declare type PackedCircleObject = {
 };
 export declare type OnEvent = ((updatedCirclePositions: PackedCircleObject) => void) | null;
 export declare type EventTypes = "movestart" | "move" | "moveend";
+export interface CirclePackerProps {
+    onMoveStart?: OnEvent;
+    onMove?: OnEvent;
+    onMoveEnd?: OnEvent;
+    centeringPasses?: number;
+    collisionPasses: number;
+    circles?: CircleInputType[];
+    padding?: number;
+    size?: Size;
+    bounds?: Bounds;
+    target?: VectorType;
+    continuousMode?: boolean;
+}
 export default class CirclePacker {
     private onMoveStart;
     private onMove;
@@ -28,19 +41,7 @@ export default class CirclePacker {
     private initialized;
     private isContinuousModeActive;
     private e;
-    constructor(params: {
-        onMoveStart?: OnEvent;
-        onMove?: OnEvent;
-        onMoveEnd?: OnEvent;
-        centeringPasses?: number;
-        collisionPasses: number;
-        circles?: CircleInputType[];
-        padding?: number;
-        size?: Size;
-        bounds?: Bounds;
-        target?: VectorType;
-        continuousMode?: boolean;
-    });
+    constructor(params: CirclePackerProps);
     updateListeners(type: EventTypes, message?: PackedCircleObject): void;
     addCircles(circles: CircleInputType[]): void;
     addCircle(circle: CircleInputType): void;

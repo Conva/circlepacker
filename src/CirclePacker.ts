@@ -1,18 +1,35 @@
-import { isSizeValid, convertToPackedCircle } from "./util";
+import { eventHandler, EventHandlerTypes } from "./CirclePackWorker";
 import PackedCircle from "./PackedCircle";
-import { Size, Bounds } from "./PackedCircleManager";
+import { Bounds, Size } from "./PackedCircleManager";
+import { convertToPackedCircle, isSizeValid } from "./util";
 import { VectorType } from "./Vector";
-import { EventHandlerTypes, eventHandler } from "./CirclePackWorker";
 
 export type IdObj = { id: string };
 export type IdPosObj = IdObj & { position: VectorType };
-export type CircleInputType = {id : string, radius : number, position : VectorType, locked : boolean }
+export type CircleInputType = {
+  id: string;
+  radius: number;
+  position: VectorType;
+  locked: boolean;
+};
 export type PackedCircleObject = { [id: string]: PackedCircle };
 export type OnEvent =
   | ((updatedCirclePositions: PackedCircleObject) => void)
   | null;
 export type EventTypes = "movestart" | "move" | "moveend";
-
+export interface CirclePackerProps {
+  onMoveStart?: OnEvent;
+  onMove?: OnEvent;
+  onMoveEnd?: OnEvent;
+  centeringPasses?: number;
+  collisionPasses: number;
+  circles?: CircleInputType[];
+  padding?: number;
+  size?: Size;
+  bounds?: Bounds;
+  target?: VectorType;
+  continuousMode?: boolean;
+}
 // this class keeps track of the drawing loop in continuous drawing mode
 // and passes messages to the worker
 export default class CirclePacker {
@@ -27,24 +44,11 @@ export default class CirclePacker {
   private isContinuousModeActive: boolean;
   private e: EventHandlerTypes;
 
-  constructor(params: {
-    onMoveStart?: OnEvent;
-    onMove?: OnEvent;
-    onMoveEnd?: OnEvent;
-    centeringPasses?: number;
-    collisionPasses: number;
-    circles?: CircleInputType[];
-    padding?:number;
-    size?: Size;
-    bounds?: Bounds;
-    target?: VectorType;
-    continuousMode?: boolean;
-  }) {
+  constructor(params: CirclePackerProps) {
     this.e = eventHandler(newPositions => {
       this.areItemsMoving = this.hasItemMoved(newPositions);
 
-      this.updateListeners("move", newPositions)
-
+      this.updateListeners("move", newPositions);
     }, params.padding);
     this.isContinuousModeActive =
       typeof params.continuousMode === "boolean" ? params.continuousMode : true;
@@ -94,7 +98,6 @@ export default class CirclePacker {
       const circlesToAdd = circles.map(convertToPackedCircle);
 
       if (circlesToAdd.length) {
-
         this.e.addcircles(circlesToAdd);
       }
     }

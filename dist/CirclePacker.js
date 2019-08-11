@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var util_1 = require("./util");
 var CirclePackWorker_1 = require("./CirclePackWorker");
+var util_1 = require("./util");
 // this class keeps track of the drawing loop in continuous drawing mode
 // and passes messages to the worker
 var CirclePacker = /** @class */ (function () {
