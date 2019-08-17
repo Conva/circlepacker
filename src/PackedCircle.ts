@@ -2,9 +2,10 @@
 // https://github.com/snorpey/CirclePackingJS/blob/master/js-module/web/js/PackedCircle.js
 // by @onedayitwillmake / Mario Gonzalez with some changes by @snorpey
 
-import Vector, { VectorType } from "./Vector";
+import { CircleInputType } from "./CirclePacker";
+import Vector from "./Vector";
 
-export default class PackedCircle {
+export default class PackedCircle<T> {
   private _previousPosition: Vector;
   private _targetPosition = new Vector(0, 0);
   private _position: Vector;
@@ -15,13 +16,12 @@ export default class PackedCircle {
 
   private radiusSquared: number = 0;
 
-
-  get previousPosition():Vector {
+  get previousPosition(): Vector {
     return this._previousPosition;
   }
 
   set previousPosition(newPosition: Vector) {
-    if (!this.locked){
+    if (!this.locked) {
       this._previousPosition = newPosition;
     }
   }
@@ -48,7 +48,7 @@ export default class PackedCircle {
     return this._targetPosition;
   }
   set targetPosition(newTargetPos: Vector) {
-    if (!this.locked){
+    if (!this.locked) {
       this._targetPosition = newTargetPos;
     }
   }
@@ -57,12 +57,10 @@ export default class PackedCircle {
     return this._position;
   }
 
-
-  set position(newPosition : Vector) {
-    if (!this.locked){
-      this._position = newPosition
+  set position(newPosition: Vector) {
+    if (!this.locked) {
+      this._position = newPosition;
     }
-
   }
 
   get radius(): number {
@@ -71,11 +69,37 @@ export default class PackedCircle {
   set radius(newRadius: number) {
     this._radius = newRadius;
   }
+  public _id: string;
+  public _locked: boolean;
+  public _additional: T | undefined;
 
-  constructor(public id: string, radius: number, x = 0, y = 0, delta = 0, private locked = false) {
-    // Where we really are
-    this._position = new Vector(x, y,locked);
-    this._previousPosition = new Vector(x, y,locked);
+  get id(): string {
+    return this._id;
+  }
+
+  get locked(): boolean {
+    return this._locked;
+  }
+
+  get additional(): T | undefined {
+    return this._additional;
+  }
+
+  constructor({
+    id,
+    radius,
+    position,
+    locked,
+    additional
+  }: CircleInputType<T>) {
+    const { x, y } = position;
+    this._id = id;
+    this._locked = locked;
+    if (additional) {
+      this._additional = additional;
+    }
+    this._position = new Vector(x, y, locked);
+    this._previousPosition = new Vector(x, y, locked);
 
     // For the div stuff  - to avoid superflous movement calls
     this._positionWithOffset = new Vector(x, y);
@@ -86,12 +110,12 @@ export default class PackedCircle {
   }
 
   setPosition(aPosition: Vector) {
-      this.previousPosition = this._position;
-      this.position = aPosition.cp();
+    this.previousPosition = this._position;
+    this.position = aPosition.cp();
   }
 
   distanceSquaredFromTargetPosition() {
-    var distanceSquared = this._position.distanceSquared(this._targetPosition)
+    var distanceSquared = this._position.distanceSquared(this._targetPosition);
     // if it's shorter than either radi, we intersect
     return distanceSquared < this.radiusSquared;
   }

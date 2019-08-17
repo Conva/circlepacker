@@ -1,6 +1,6 @@
-import { Size } from "./PackedCircleManager";
-import PackedCircle from "./PackedCircle";
 import { CircleInputType } from "./CirclePacker";
+import PackedCircle from "./PackedCircle";
+import { Size } from "./PackedCircleManager";
 
 export function random(min: number, max: number) {
   if (typeof min !== "number" && typeof max !== "number") {
@@ -18,12 +18,6 @@ export function random(min: number, max: number) {
   return result;
 }
 
-
-export function convertToPackedCircle(circle: CircleInputType) {
-  return (
-   new PackedCircle(circle.id,circle.radius,circle.position.x,circle.position.y, undefined, circle.locked)
-  );
-}
 
 export function isSizeValid(size: Size) {
   return (

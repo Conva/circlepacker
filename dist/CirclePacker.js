@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var CirclePackWorker_1 = require("./CirclePackWorker");
+var PackedCircle_1 = __importDefault(require("./PackedCircle"));
 var util_1 = require("./util");
 // this class keeps track of the drawing loop in continuous drawing mode
 // and passes messages to the worker
@@ -48,7 +52,7 @@ var CirclePacker = /** @class */ (function () {
     };
     CirclePacker.prototype.addCircles = function (circles) {
         if (Array.isArray(circles) && circles.length) {
-            var circlesToAdd = circles.map(util_1.convertToPackedCircle);
+            var circlesToAdd = circles.map(function (circle) { return new PackedCircle_1.default(circle); });
             if (circlesToAdd.length) {
                 this.e.addcircles(circlesToAdd);
             }

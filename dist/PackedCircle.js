@@ -8,18 +8,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = __importDefault(require("./Vector"));
 var PackedCircle = /** @class */ (function () {
-    function PackedCircle(id, radius, x, y, delta, locked) {
-        if (x === void 0) { x = 0; }
-        if (y === void 0) { y = 0; }
-        if (delta === void 0) { delta = 0; }
-        if (locked === void 0) { locked = false; }
-        this.id = id;
-        this.locked = locked;
+    function PackedCircle(_a) {
+        var id = _a.id, radius = _a.radius, position = _a.position, locked = _a.locked, additional = _a.additional;
         this._targetPosition = new Vector_1.default(0, 0);
         this._radius = 0;
         this._originalRadius = 0;
         this.radiusSquared = 0;
-        // Where we really are
+        var x = position.x, y = position.y;
+        this._id = id;
+        this._locked = locked;
+        if (additional) {
+            this._additional = additional;
+        }
         this._position = new Vector_1.default(x, y, locked);
         this._previousPosition = new Vector_1.default(x, y, locked);
         // For the div stuff  - to avoid superflous movement calls
@@ -96,6 +96,27 @@ var PackedCircle = /** @class */ (function () {
         },
         set: function (newRadius) {
             this._radius = newRadius;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PackedCircle.prototype, "id", {
+        get: function () {
+            return this._id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PackedCircle.prototype, "locked", {
+        get: function () {
+            return this._locked;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PackedCircle.prototype, "additional", {
+        get: function () {
+            return this._additional;
         },
         enumerable: true,
         configurable: true

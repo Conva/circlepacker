@@ -10,12 +10,12 @@ export declare type Bounds = {
     right: number;
     bottom: number;
 };
-export default class PackedCircleManager {
+export default class PackedCircleManager<T> {
     private padding;
     private draggedCircle;
     private _damping;
     private bounds;
-    readonly allCircles: PackedCircle[];
+    readonly allCircles: PackedCircle<T>[];
     private desiredTarget;
     constructor(padding?: number);
     private _numberOfCenteringPasses;
@@ -34,7 +34,7 @@ export default class PackedCircleManager {
      * Add a circle
      * @param aCircle A Circle to add, should already be created.
      */
-    addCircle(aCircle: PackedCircle): void;
+    addCircle(aCircle: PackedCircle<T>): void;
     /**
      * Remove a circle
      * @param circleToRemoveId Id of the circle to remove
@@ -50,13 +50,13 @@ export default class PackedCircleManager {
      * Each circle will have it's own 'targetPosition' later on
      */
     handleCollisions(): void;
-    handleBoundaryForCircle(aCircle: PackedCircle): void;
+    handleBoundaryForCircle(aCircle: PackedCircle<T>): void;
     /**
      * Force a certain circle to be the 'draggedCircle'.
      * Can be used to undrag a circle by calling setDraggedCircle(null)
      * @param aCircle  Circle to start dragging. It's assumed to be part of our list. No checks in place currently.
      */
-    setDraggedCircle(aCircle: PackedCircle | null): void;
+    setDraggedCircle(aCircle: PackedCircle<T> | null): void;
     dragStart(id: string): void;
     dragEnd(): void;
     drag(position: VectorType): void;

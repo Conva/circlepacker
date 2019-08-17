@@ -13,16 +13,14 @@ export type Bounds = {
   bottom: number;
 };
 
-export default class PackedCircleManager {
-  private draggedCircle: PackedCircle | null = null;
+export default class PackedCircleManager<T> {
+  private draggedCircle: PackedCircle<T> | null = null;
   private _damping = 0.025;
   private bounds: Bounds = { left: 0, top: 0, right: 0, bottom: 0 };
-  readonly allCircles: PackedCircle[] = [];
+  readonly allCircles: PackedCircle<T>[] = [];
   private desiredTarget = new Vector(0, 0);
 
-  constructor(private padding = 1.08){
-
-  }
+  constructor(private padding = 1.08) {}
   // Number of passes for the centering and collision
   // algorithms - it's (O)logN^2 so use increase at your own risk!
   // Play with these numbers - see what works best for your project
@@ -86,7 +84,7 @@ export default class PackedCircleManager {
    * Add a circle
    * @param aCircle A Circle to add, should already be created.
    */
-  addCircle(aCircle: PackedCircle) {
+  addCircle(aCircle: PackedCircle<T>) {
     this.allCircles.push(aCircle);
     aCircle.targetPosition = this.desiredTarget.cp();
   }
@@ -122,7 +120,7 @@ export default class PackedCircleManager {
     // store information about the previous position
     for (let i = 0; i < circleCount; ++i) {
       const circle = circleList[i];
-      
+
       circle.previousPosition = circle.position.cp();
     }
 
@@ -233,7 +231,7 @@ export default class PackedCircleManager {
     }
   }
 
-  handleBoundaryForCircle(aCircle: PackedCircle) {
+  handleBoundaryForCircle(aCircle: PackedCircle<T>) {
     const x = aCircle.position.x;
     const y = aCircle.position.y;
     const radius = aCircle.radius;
@@ -267,7 +265,7 @@ export default class PackedCircleManager {
    * Can be used to undrag a circle by calling setDraggedCircle(null)
    * @param aCircle  Circle to start dragging. It's assumed to be part of our list. No checks in place currently.
    */
-  setDraggedCircle(aCircle: PackedCircle | null) {
+  setDraggedCircle(aCircle: PackedCircle<T> | null) {
     // Setting to null, and we had a circle before.
     // Restore the radius of the circle as it was previously
     if (this.draggedCircle && this.draggedCircle !== aCircle) {

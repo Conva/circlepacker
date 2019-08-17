@@ -66,12 +66,7 @@ exports.eventHandler = function (moveCallback, padding) {
     };
     var sendPositions = function () {
         var positions = circleManager.allCircles.reduce(function (result, circle) {
-            result[circle.id] = {
-                position: circle.position,
-                previousPosition: circle.previousPosition,
-                radius: circle.radius,
-                delta: circle.delta
-            };
+            result[circle.id] = circle;
             return result;
         }, {});
         moveCallback(positions);

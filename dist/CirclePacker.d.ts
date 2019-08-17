@@ -7,31 +7,32 @@ export declare type IdObj = {
 export declare type IdPosObj = IdObj & {
     position: VectorType;
 };
-export declare type CircleInputType = {
+export declare type CircleInputType<T> = {
+    additional?: T;
     id: string;
     radius: number;
     position: VectorType;
     locked: boolean;
 };
-export declare type PackedCircleObject = {
-    [id: string]: PackedCircle;
+export declare type PackedCircleObject<T> = {
+    [id: string]: PackedCircle<T>;
 };
-export declare type OnEvent = ((updatedCirclePositions: PackedCircleObject) => void) | null;
+export declare type OnEvent<T> = ((updatedCirclePositions: PackedCircleObject<T>) => void) | null;
 export declare type EventTypes = "movestart" | "move" | "moveend";
-export interface CirclePackerProps {
-    onMoveStart?: OnEvent;
-    onMove?: OnEvent;
-    onMoveEnd?: OnEvent;
+export interface CirclePackerProps<T> {
+    onMoveStart?: OnEvent<T>;
+    onMove?: OnEvent<T>;
+    onMoveEnd?: OnEvent<T>;
     centeringPasses?: number;
     collisionPasses: number;
-    circles?: CircleInputType[];
+    circles?: CircleInputType<T>[];
     padding?: number;
     size?: Size;
     bounds?: Bounds;
     target?: VectorType;
     continuousMode?: boolean;
 }
-export default class CirclePacker {
+export default class CirclePacker<T> {
     private onMoveStart;
     private onMove;
     private onMoveEnd;
@@ -41,11 +42,11 @@ export default class CirclePacker {
     private initialized;
     private isContinuousModeActive;
     private e;
-    constructor(params: CirclePackerProps);
-    updateListeners(type: EventTypes, message?: PackedCircleObject): void;
-    addCircles(circles: CircleInputType[]): void;
-    addCircle(circle: CircleInputType): void;
-    removeCircle(circle: PackedCircle): void;
+    constructor(params: CirclePackerProps<T>);
+    updateListeners(type: EventTypes, message?: PackedCircleObject<T>): void;
+    addCircles(circles: CircleInputType<T>[]): void;
+    addCircle(circle: CircleInputType<T>): void;
+    removeCircle(circle: PackedCircle<T>): void;
     setSizeAndBounds(size: Size, bounds: Bounds): void;
     setTarget(targetPos: VectorType): void;
     setCenteringPasses(numberOfCenteringPasses: number): void;
@@ -58,6 +59,6 @@ export default class CirclePacker {
     updateLoop(): void;
     startLoop(): void;
     stopLoop(): void;
-    hasItemMoved(circleObj: PackedCircleObject): boolean;
+    hasItemMoved(circleObj: PackedCircleObject<T>): boolean;
     destroy(): void;
 }

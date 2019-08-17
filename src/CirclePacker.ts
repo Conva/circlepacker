@@ -1,29 +1,30 @@
 import { eventHandler, EventHandlerTypes } from "./CirclePackWorker";
 import PackedCircle from "./PackedCircle";
 import { Bounds, Size } from "./PackedCircleManager";
-import { convertToPackedCircle, isSizeValid } from "./util";
+import { isSizeValid } from "./util";
 import { VectorType } from "./Vector";
 
 export type IdObj = { id: string };
 export type IdPosObj = IdObj & { position: VectorType };
-export type CircleInputType = {
+export type CircleInputType<T> = {
+  additional?: T;
   id: string;
   radius: number;
   position: VectorType;
   locked: boolean;
 };
-export type PackedCircleObject = { [id: string]: PackedCircle };
-export type OnEvent =
-  | ((updatedCirclePositions: PackedCircleObject) => void)
+export type PackedCircleObject<T> = { [id: string]: PackedCircle<T> };
+export type OnEvent<T> =
+  | ((updatedCirclePositions: PackedCircleObject<T>) => void)
   | null;
 export type EventTypes = "movestart" | "move" | "moveend";
-export interface CirclePackerProps {
-  onMoveStart?: OnEvent;
-  onMove?: OnEvent;
-  onMoveEnd?: OnEvent;
+export interface CirclePackerProps<T> {
+  onMoveStart?: OnEvent<T>;
+  onMove?: OnEvent<T>;
+  onMoveEnd?: OnEvent<T>;
   centeringPasses?: number;
   collisionPasses: number;
-  circles?: CircleInputType[];
+  circles?: CircleInputType<T>[];
   padding?: number;
   size?: Size;
   bounds?: Bounds;
@@ -32,19 +33,19 @@ export interface CirclePackerProps {
 }
 // this class keeps track of the drawing loop in continuous drawing mode
 // and passes messages to the worker
-export default class CirclePacker {
-  private onMoveStart: OnEvent;
-  private onMove: OnEvent;
-  private onMoveEnd: OnEvent;
+export default class CirclePacker<T> {
+  private onMoveStart: OnEvent<T>;
+  private onMove: OnEvent<T>;
+  private onMoveEnd: OnEvent<T>;
 
   private isLooping = false;
   private areItemsMoving = true;
   private animationFrameId = NaN;
   private initialized = true;
   private isContinuousModeActive: boolean;
-  private e: EventHandlerTypes;
+  private e: EventHandlerTypes<T>;
 
-  constructor(params: CirclePackerProps) {
+  constructor(params: CirclePackerProps<T>) {
     this.e = eventHandler(newPositions => {
       this.areItemsMoving = this.hasItemMoved(newPositions);
 
@@ -77,7 +78,7 @@ export default class CirclePacker {
     }
   }
 
-  updateListeners(type: EventTypes, message?: PackedCircleObject) {
+  updateListeners(type: EventTypes, message?: PackedCircleObject<T>) {
     if (message) {
       if (type === "movestart" && typeof this.onMoveStart === "function") {
         this.onMoveStart(message);
@@ -93,9 +94,9 @@ export default class CirclePacker {
     }
   }
 
-  addCircles(circles: CircleInputType[]) {
+  addCircles(circles: CircleInputType<T>[]) {
     if (Array.isArray(circles) && circles.length) {
-      const circlesToAdd = circles.map(convertToPackedCircle);
+      const circlesToAdd = circles.map(circle => new PackedCircle(circle));
 
       if (circlesToAdd.length) {
         this.e.addcircles(circlesToAdd);
@@ -105,11 +106,11 @@ export default class CirclePacker {
     this.startLoop();
   }
 
-  addCircle(circle: CircleInputType) {
+  addCircle(circle: CircleInputType<T>) {
     this.addCircles([circle]);
   }
 
-  removeCircle(circle: PackedCircle) {
+  removeCircle(circle: PackedCircle<T>) {
     if (circle) {
       if (circle.id) {
         this.e.removecircle(circle.id);
@@ -202,7 +203,7 @@ export default class CirclePacker {
     }
   }
 
-  hasItemMoved(circleObj: PackedCircleObject) {
+  hasItemMoved(circleObj: PackedCircleObject<T>) {
     let result = false;
 
     for (let id in circleObj) {

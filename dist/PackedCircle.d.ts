@@ -1,7 +1,6 @@
+import { CircleInputType } from "./CirclePacker";
 import Vector from "./Vector";
-export default class PackedCircle {
-    id: string;
-    private locked;
+export default class PackedCircle<T> {
     private _previousPosition;
     private _targetPosition;
     private _position;
@@ -18,7 +17,13 @@ export default class PackedCircle {
     targetPosition: Vector;
     position: Vector;
     radius: number;
-    constructor(id: string, radius: number, x?: number, y?: number, delta?: number, locked?: boolean);
+    _id: string;
+    _locked: boolean;
+    _additional: T | undefined;
+    readonly id: string;
+    readonly locked: boolean;
+    readonly additional: T | undefined;
+    constructor({ id, radius, position, locked, additional }: CircleInputType<T>);
     setPosition(aPosition: Vector): void;
     distanceSquaredFromTargetPosition(): boolean;
     readonly delta: Vector;

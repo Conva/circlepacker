@@ -1,11 +1,11 @@
+import { PackedCircleObject } from "./CirclePacker";
+import PackedCircle from "./PackedCircle";
 import { Bounds, Size } from "./PackedCircleManager";
 import { VectorType } from "./Vector";
-import PackedCircle from "./PackedCircle";
-import { PackedCircleObject } from "./CirclePacker";
-export declare type EventHandlerTypes = {
+export declare type EventHandlerTypes<T> = {
     bounds: (message: Bounds) => void;
     target: (message: VectorType) => void;
-    addcircles: (message: PackedCircle[]) => void;
+    addcircles: (message: PackedCircle<T>[]) => void;
     removecircle: (message: string) => void;
     dragstart: (message: string) => void;
     drag: (message: VectorType) => void;
@@ -16,4 +16,4 @@ export declare type EventHandlerTypes = {
     update: () => void;
     size: (message: Size) => void;
 };
-export declare const eventHandler: (moveCallback: (position: PackedCircleObject) => void, padding?: number | undefined) => EventHandlerTypes;
+export declare const eventHandler: <T>(moveCallback: (position: PackedCircleObject<T>) => void, padding?: number | undefined) => EventHandlerTypes<T>;

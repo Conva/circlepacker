@@ -1,16 +1,15 @@
 // this code is mostly for message passing between the
 // PackedCircleManager and CirclePacker classes
 
+import { PackedCircleObject } from "./CirclePacker";
+import PackedCircle from "./PackedCircle";
 import PackedCircleManager, { Bounds, Size } from "./PackedCircleManager";
 import Vector, { VectorType } from "./Vector";
-import PackedCircle from "./PackedCircle";
-import { PackedCircleObject } from "./CirclePacker";
 
-
-export type EventHandlerTypes = {
+export type EventHandlerTypes<T> = {
   bounds: (message: Bounds) => void;
   target: (message: VectorType) => void;
-  addcircles: (message: PackedCircle[]) => void;
+  addcircles: (message: PackedCircle<T>[]) => void;
   removecircle: (message: string) => void;
   dragstart: (message: string) => void;
   drag: (message: VectorType) => void;
@@ -22,12 +21,11 @@ export type EventHandlerTypes = {
   size: (message: Size) => void;
 };
 
-export const eventHandler = (
-  moveCallback: (position: PackedCircleObject) => void,
-  padding? : number
+export const eventHandler = <T>(
+  moveCallback: (position: PackedCircleObject<T>) => void,
+  padding?: number
 ) => {
-
-  const circleManager = new PackedCircleManager(padding);
+  const circleManager = new PackedCircleManager<T>(padding);
 
   const bounds = (message: Bounds) => {
     circleManager.setBounds(message);
@@ -40,7 +38,7 @@ export const eventHandler = (
     setTarget(message);
   };
 
-  const addcircles = (message: PackedCircle[]) => {
+  const addcircles = (message: PackedCircle<T>[]) => {
     addCircles(message);
   };
 
@@ -78,9 +76,7 @@ export const eventHandler = (
     }
   };
 
-
-
-  const addCircles = (circles: PackedCircle[]) => {
+  const addCircles = (circles: PackedCircle<T>[]) => {
     if (Array.isArray(circles) && circles.length) {
       circles.forEach(circleManager.addCircle.bind(circleManager));
     }
@@ -106,22 +102,11 @@ export const eventHandler = (
     const positions = circleManager.allCircles.reduce(
       (
         result: {
-          [id: string]: {
-            position: VectorType;
-            previousPosition: VectorType;
-            radius: number;
-            delta: Vector;
-          };
+          [id: string]: PackedCircle<T>;
         },
         circle
       ) => {
-        result[circle.id] = {
-          position: circle.position,
-          previousPosition: circle.previousPosition,
-          radius: circle.radius,
-          delta: circle.delta
-        };
-
+        result[circle.id] = circle;
         return result;
       },
       {}
@@ -143,5 +128,5 @@ export const eventHandler = (
     collisionpasses,
     damping,
     size
-  } as EventHandlerTypes;
+  } as EventHandlerTypes<T>;
 };
